@@ -3,38 +3,25 @@ package listacompras
 import menu.Menu.Companion.listaAlimentos
 import menu.Menu.Companion.menu
 
+import menu.Menu.Companion.validarNumeroDigitado
+import menu.Menu.Companion.verificarValidacao
+
 /*Aqui chamamos de lista de compras apenas para ter as funções específicas da lista de compras que o sistema exige,
 afinal é um sistema de lista de compras. Não confundir com o conceito de List do Kotlin*/
 class ListaCompras {
     companion object {
         fun informarQuantidadeVerduraGrao(alimento: String): Int {
             println("Informe a quantidade de $alimento em gramas: ")
-            val input = readln()
-
-            if (input.isEmpty() || input.isBlank()) {
-                throw UnsupportedOperationException("Não é permitido inserir valor vazio")
-            }
-
-            var gramas = 0
-            try {
-                gramas = input.toInt()
-                if (gramas < 0) {
-                    println("Não é permitido números negativos, tente novamente")
-                    informarQuantidadeVerduraGrao(alimento)
-                }
-
-            } catch (exception: NumberFormatException) {
-                println("Não é permitido texto, somente número")
-            }
-            return gramas
+            return validarNumeroDigitado()
         }
 
         fun informarNomeAlimento(alimento: String): String {
             println("Informe o tipo $alimento a ser adicionado na lista: ")
-            val nome = readln()
+            var nome = readln()
 
-            if (nome.isEmpty() || nome.isBlank()) {
-                throw UnsupportedOperationException("Não é permitido inserir valor vazio")
+            while (nome.isEmpty() || nome.isBlank()) {
+                println("Inválido, digite novamente")
+                nome = verificarValidacao()
             }
             return nome
         }
@@ -64,7 +51,7 @@ class ListaCompras {
         }
 
 
-        fun exibirLista(){
+        fun exibirLista() {
             if (listaAlimentos.isEmpty()) {
                 println("Não contém nenhum item na lista")
                 menu()
@@ -74,14 +61,12 @@ class ListaCompras {
                 }
                 println("\nA quantidade de itens a ser comprada é : ${listaAlimentos.size}\n")
                 menu()
-
             }
+        }
 
         fun limparLista(listaAlimentos: HashMap<String, Number>) {
             listaAlimentos.clear()
             exibirLista()
-
         }
-
     }
 }
